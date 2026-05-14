@@ -1,0 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.game-canvas {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+}
+
+/* Menu specific styles */
+.menu-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.menu-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  z-index: 2;
+  /* Ensure content stays above scanlines */
+}
+
+.menu-title {
+  font-size: 4rem;
+  color: #f5f5dc;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+  font-family: 'Courier New', monospace;
+}
+
+.start-button {
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  background-color: #f0e68c;
+  color: #222;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Courier New', monospace;
+}
+
+.start-button:hover {
+  background-color: #ffff8a;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 255, 0, 0.7);
+}
+
+/* Scanline effect */
+.scanline-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom,
+      transparent 50%,
+      rgba(0, 0, 0, 0.1) 50%);
+  background-size: 100% 4px;
+  z-index: 1;
+  pointer-events: none;
+  animation: scanline 10s linear infinite;
+  opacity: 0.3;
+}
+
+/* CRT flicker animation */
+.scanline-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center,
+      transparent 0%,
+      rgba(0, 0, 0, 0.2) 90%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* VHS static noise */
+.scanline-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAQzSURBVGhD7ZhNaBNBFMfTqkVF/EJFRESKiqCI4MGDn3gQFUVEREQUj548efDmyYsXQVEQD0JBT+JBpAgiiFTsQc9+SLWtaWva7Cbdpklqkk02+/m8mZ3JSLKZ3c1u1YMO/GHTmfeS+b+ZeTOzSTfc4baSRJKdXY1ikddNQt8k9E3C2SQoFnndhMNNQhTcImYXM4uYVcwJmEVETiD4JYvA6SJwqgjl0i7M+z/LBcWhXHAGQB+tMVokzFEiHKJLQLSk4yJmtwji9KArWjnL5TLl83lhwklmNlukRCrD5fIFOfPlyhfZ9/ULs+3D9jvlCgXuxySK3BtPhWYSxVKJn78jJAj60ytixLrBrhH98RXJFYqUjCVoNLjGGvXtjf1Z2izqTxYkQNB5IGfuNWLMBxEPYvuZbC6XkwiCzmPZnPRsI5hFEO8+f8W0yb7RMTNu8NiQdjbPqaYQdD5GoxQOhy2JwOkhVqB8IU/zS8uUrVMQgdNLqZT0jBo0gQicXlhZlQZjBloXQczO/RFm3K0xk8npBDHk/xXmLf2ZXN5ybDWoCQRBbCwtqwOpAYEsLS9r7T2Dw1RKJJhMNoaJgBE4nUql6WIwSiHfuDR5tSAYbf/pZGFKK+QviE1uNqXcnPSDi1/m6YPvm6HYg4J+VhUb7CK4BI71PKeXU6tSOkDsYIp5Kx3mmmOjXURQzYYjaxIfnl6l3jvPaPruoJYGjF8WQTO6PtGwDlOIcFWVTKUMQ63QH8+wZ4yMaYQaEYHHKzvDyiKXXpzQVJ3y1z4aGF3Q0rF0mqbHfpo6jfFPvzRKjYggEyLjaZFhfT2PGJ+jrz+ntDQ+iK/+Xc0YJzVSkSyyvdkNCdw9uCd8aBf5Njcvjfvs+C7qaN1C3X2j5I+t62T75+W4RqkREQSxNw5rP/LtYf+l6OQ7uO+Etr/Xu1ubE+jc3kL73ZuEW4xhd2SGBqK/qVgqa99kGqFGRJB2MVwjsR6Y6qLOHXwRssjWTVuppWmLlh4++YTCkVUtiHAmS1Hut47eYXr47BLFErGGRdxkLTUVLTOVhePo/ndcQdJqZbj+fFmn31ys2q4FmxIIYnF5RRo0gsi4GogsaUIWxOdPn6F7z+6yyNKBD1TJ7XVNQOYO2yyCQrO/bVeNiAxkWRy/9MqyCAIJfXbAKIK7CdKnpYiMuWDimzSSMSFyMRCWBpIXxEDnVu1+jrYgmAV1fH8r7d3TrrWpEUGWxMq4dLBPuDKbEZWoLQgmw6rKvnlHcpNHVWNuUVqtzFTBLOZFsPFHE9p3lV4RzMAGdxVzXyFjXgVbERlUD1DhNzFJjFVRBVsRGcyMqtLf1PBC1i6CWqEWWxEZ3MHX4/ZOGk9o7xwxk3B/gmmSqv9nMm4j4nqSSRj79R8Tf2K236KAGgAAAABJRU5ErkJggg==");
+  background-repeat: repeat;
+  opacity: 0.02;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes scanline {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 0 100%;
+  }
+}
